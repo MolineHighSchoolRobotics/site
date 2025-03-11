@@ -1,0 +1,15 @@
+#titleContainer {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    align-content: center;
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
+
+    h1 {
+        font-size: 300%;
+    }
+}
