@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progressive Video Speed and Deepfry</title>
+    <style>
+        body { text-align: center; }
+        video { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <video id="video" controls>
+        <source src="/assets/img/chicken-jockey.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        const video = document.getElementById('video');
+        let playbackRate = 1.0; // Initial playback rate
+        let pitchRate = 1.0;    // Initial pitch rate
+
+        // Filter parameters for deepfry
+        let contrast = 100; // Percentage
+        let brightness = 100; // Percentage
+        let saturation = 100; // Percentage
+        let blur = 0;  // Blur effect in pixels
+
+        // Function to progressively speed up the video and increase pitch
+        function progressivelySpeedUp() {
+            if (playbackRate < 100.0) {  // Limit the playback rate to 10x
+                playbackRate += 0.5;  // Increase playback rate gradually
+                pitchRate += 50;     // Increase pitch gradually
+                video.playbackRate = playbackRate;
+
+                // Change the pitch (using Web Audio API)
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const sourceNode = audioContext.createMediaElementSource(video);
+                const pitchShiftNode = audioContext.createGain();
+                pitchShiftNode.gain.setValueAtTime(pitchRate, audioContext.currentTime);
+
+                sourceNode.connect(pitchShiftNode);
+                pitchShiftNode.connect(audioContext.destination);
+
+                // Apply deepfry effects gradually
+                contrast += 100; // Increase contrast gradually
+                brightness += 100; // Increase brightness gradually
+                saturation += 100; // Increase saturation gradually
+                blur += 0.5;  // Increase blur gradually
+
+                // Apply the CSS filters
+                video.style.filter = `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)`;
+
+                // Schedule the next call to progressivelySpeedUp
+                setTimeout(progressivelySpeedUp, 500); // every 500ms
+            }
+        }
+
+        // Start playing the video
+        video.onplay = () => {
+            progressivelySpeedUp(); // Begin speeding up the video when it starts
+        };
+
+        // Loop the video when it ends
+        video.onended = () => {
+            video.currentTime = 0;   // Reset to the start
+            video.play();            // Play it again
+        };
+
+        // Play the video when the page loads
+        window.onload = () => {
+            video.play();
+        };
+    </script>
+</body>
+</html>

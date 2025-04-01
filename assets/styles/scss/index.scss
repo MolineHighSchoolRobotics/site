@@ -73,9 +73,18 @@ img {
   width: 100%;
   position: relative;
   margin: auto;
+
 }
 
-/* Caption text */
+.mySlides {
+  img {
+    width: 100%;
+    height: 90vh;
+    object-fit: cover;
+    object-position: center top;
+  }
+}
+
 .text {
   color: #f2f2f2;
   font-size: 15px;
@@ -136,7 +145,7 @@ img {
 #scroll-down {
   animation: MoveUpDown 2.5s ease-in-out infinite;
   position: absolute;
-  top: 85vh;
+  top: 95vh;
   text-align: center;
   left: 50%;
   transform: translateX(-50%);
